@@ -4,11 +4,22 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.Background?>
-<AnchorPane prefHeight="297.0" prefWidth="535.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tetetete.client.ChoiceController">
+<AnchorPane prefHeight="513.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tetetete.client.ChoiceController">
    <children>
-      <Button fx:id="loginButton" layoutX="217.0" layoutY="41.0" mnemonicParsing="false" text="Я УЖЕ СМЕШАРИК!!!!!!!!" />
-      <Button fx:id="registerButton" layoutX="223.0" layoutY="82.0" mnemonicParsing="false" text="я ещё не смешарик ((((" />
+      <ImageView fitHeight="574.0" fitWidth="919.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../imeges/An%20Evangelion%20dark%20wallpaper%20I%20made.jpg" />
+         </image>
+      </ImageView>
+      <Button fx:id="loginButton" layoutX="436.0" layoutY="22.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="300.0" text="Я УЖЕ СМЕШАРИК!!!!!!!!">
+         <font>
+            <Font name="Proxy 9" size="16.0" />
+         </font></Button>
+      <Button fx:id="registerButton" layoutX="436.0" layoutY="105.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="300.0" text="я ещё не смешарик ((((">
+         <font>
+            <Font name="GothicI" size="16.0" />
+         </font></Button>
    </children>
 </AnchorPane>

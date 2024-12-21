@@ -8,26 +8,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-    private final UserRepository userRepository = new UserRepository();
+    private final DatabaseManager databaseManager = new DatabaseManager();
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public void register(String username, String password) throws UserAlreadyExistsException {
-        if (userRepository.exists(username)) {
+        if (databaseManager.authenticate(username, password)) {
             throw new UserAlreadyExistsException("User with username " + username + " already exists.");
         }
         String hashedPassword = passwordEncoder.encode(password);
-        userRepository.addUser(username, hashedPassword);
+        if (!databaseManager.register(username, hashedPassword)) {
+            throw new UserAlreadyExistsException("User with username " + username + " already exists.");
+        }
         logger.info("User registered: {}", username);
     }
 
     public void authenticate(String username, String password) throws InvalidCredentialsException {
-        if (!userRepository.exists(username) || !passwordEncoder.matches(password, userRepository.getHashedPassword(username))) {
+        if (!databaseManager.authenticate(username, passwordEncoder.encode(password))) {
             throw new InvalidCredentialsException("Invalid credentials for user: " + username);
         }
         logger.info("User authenticated: {}", username);
-    }
-
-    private String getHashedPassword(String username) {
-        return userRepository.getHashedPassword(username);
     }
 }

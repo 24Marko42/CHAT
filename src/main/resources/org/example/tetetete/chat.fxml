@@ -4,25 +4,13 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.Background?>
-<?import javafx.scene.layout.BackgroundImage?>
-<?import javafx.scene.layout.BackgroundPosition?>
-<?import javafx.scene.layout.BackgroundRepeat?>
-<?import javafx.scene.layout.BackgroundSize?>
+
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tetetete.client.ChatController">
-    <background>
-        <Background>
-            <images>
-                <BackgroundImage url="@images/An Evangelion dark wallpaper I made.jpg" repeatX="repeat" repeatY="repeat" position="CENTER" />
-            </images>
-        </Background>
-    </background>
+
     <children>
         <VBox spacing="10" AnchorPane.topAnchor="0" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.bottomAnchor="0">
             <TextArea fx:id="chatArea" editable="false" prefHeight="300.0" />

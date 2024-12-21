@@ -9,6 +9,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
+import org.example.tetetete.common.exception.UserAlreadyExistsException;
+import org.example.tetetete.server.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +71,15 @@ public class RegisterController {
     // Метод для регистрации пользователя (пример)
     private boolean register(String username, String password) {
         // Здесь можно реализовать логику регистрации
-        return !username.isEmpty() && !password.isEmpty();
+        // Например, можно использовать UserService для регистрации
+        UserService userService = new UserService();
+        try {
+            userService.register(username, password);
+            return true;
+        } catch (UserAlreadyExistsException e) {
+            logger.error("User already exists", e);
+            return false;
+        }
     }
 
     // Метод для открытия окна логина

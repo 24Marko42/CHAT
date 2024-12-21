@@ -1,11 +1,14 @@
 package org.example.tetetete.client;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
+import javafx.stage.Stage;
+import javafx.scene.control.ButtonType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,13 +47,7 @@ public class ChatController {
         });
 
         // Устанавливаем обработчик событий для кнопки выхода
-        logoutButton.setOnAction(event -> {
-            try {
-                logout();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+        logoutButton.setOnAction(event -> showLogoutConfirmation());
     }
 
     private void sendMessage() {
@@ -61,11 +58,31 @@ public class ChatController {
         }
     }
 
+    private void showLogoutConfirmation() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Вы точно хотите выйти?");
+        alert.setContentText("Вы действительно хотите выйти из чата?");
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                try {
+                    logout();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
     private void logout() throws IOException {
         // Логика для выхода из чата
-        // Например, можно закрыть соединение и вернуться к окну логина
         socketHandler.close();
-        // Здесь можно добавить логику для перехода к окну логина
+        // Закрываем окно чата
+        Stage stage = (Stage) logoutButton.getScene().getWindow();
+        stage.close();
+        // Полное завершение программы
+        System.exit(0);
     }
 
     // Метод для установки обработчика сокета
