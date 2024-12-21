@@ -15,19 +15,16 @@ public class ChatClient extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Загружаем FXML файл и получаем корневой элемент
+        // Загружаем FXML файл логина и получаем корневой элемент
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/tetetete/login.fxml"));
         Parent root = loader.load();
 
-        // Получаем контроллер чата
-        ChatController chatController = loader.getController();
-
-        // Создаем ClientSocketHandler и передаем ему контроллер чата
-        ClientSocketHandler socketHandler = new ClientSocketHandler("localhost", 8080, chatController);
-        chatController.setSocketHandler(socketHandler);
+        // Получаем контроллер логина
+        LoginController loginController = loader.getController();
+        loginController.setPrimaryStage(primaryStage);
 
         // Настраиваем и отображаем основное окно приложения
-        primaryStage.setTitle("Chat Client");
+        primaryStage.setTitle("Chat Client - Login");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
