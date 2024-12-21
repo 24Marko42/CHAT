@@ -60,6 +60,7 @@ public class RegisterController {
         if (register(username, password)) {
             ChatClient.setUsername(username); // Сохраняем имя пользователя
             openLoginWindow(); // Открываем окно логина после успешной регистрации
+            primaryStage.close(); // Закрываем окно регистрации
         } else {
             logger.warn("Registration failed for user: {}", username); // Логируем неудачную попытку регистрации
         }
@@ -83,9 +84,6 @@ public class RegisterController {
             loginStage.setTitle("Chat Client - Login");
             loginStage.setScene(new Scene(root));
             loginStage.show();
-
-            // Закрываем окно регистрации
-            primaryStage.close();
         } catch (IOException e) {
             logger.error("Error while opening login window", e); // Логируем ошибку при открытии окна логина
         }

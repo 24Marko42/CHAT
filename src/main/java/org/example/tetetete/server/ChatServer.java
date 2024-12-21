@@ -11,19 +11,14 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class ChatServer {
     private static final Logger logger = LoggerFactory.getLogger(ChatServer.class);
+
     private final int port;
     private final String host;
-    private final UserService userService = new UserService();
     private final Map<String, ClientHandler> clients = new ConcurrentHashMap<>();
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ChatServer(int port, String host) {
         this.port = port;
@@ -38,16 +33,17 @@ public class ChatServer {
                 new Thread(new ClientHandler(clientSocket, this)).start();
             }
         } catch (IOException e) {
-            logger.error("Ошибка запуска сервера: {}", e.getMessage());
+            logger.error("Ошибка запуска сервера: {}", e.getMessage(), e);
         }
     }
 
     public void broadcast(String message, ClientHandler sender) {
-        clients.values().forEach(client -> {
+        logger.info("Широковещательная отправка сообщения: {}", message);
+        for (ClientHandler client : clients.values()) {
             if (client != sender) {
                 client.sendMessage(message);
             }
-        });
+        }
     }
 
     public synchronized void addClient(String username, ClientHandler clientHandler) {
@@ -58,10 +54,12 @@ public class ChatServer {
     }
 
     public synchronized void removeClient(String username) {
-        clients.remove(username);
-        broadcast("Пользователь " + username + " покинул чат.", null);
-        logger.info("Пользователь {} отключен", username);
-        updateUserCount();
+        if (username != null) {
+            clients.remove(username);
+            broadcast("Пользователь " + username + " покинул чат.", null);
+            logger.info("Пользователь {} отключен", username);
+            updateUserCount();
+        }
     }
 
     private void updateUserCount() {
@@ -73,11 +71,9 @@ public class ChatServer {
         AppConfig config = new AppConfig();
         int port = Integer.parseInt(config.getProperty("server.port"));
         String host = config.getProperty("server.host");
+
         ChatServer chatServer = new ChatServer(port, host);
         chatServer.start();
-
-        // Запускаем периодическое обновление количества пользователей
-        chatServer.scheduler.scheduleAtFixedRate(() -> chatServer.updateUserCount(), 0, 1, TimeUnit.SECONDS);
     }
 
     public static class ClientHandler implements Runnable {
@@ -98,33 +94,36 @@ public class ChatServer {
                 reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 writer = new PrintWriter(clientSocket.getOutputStream(), true);
 
-                // Получаем имя пользователя от клиента
+                // Получаем имя пользователя
+                writer.println("Введите имя пользователя:");
                 username = reader.readLine();
 
                 if (username == null || username.isBlank()) {
-                    writer.println("Недопустимое имя пользователя. Подключение завершено.");
+                    writer.println("Имя пользователя не может быть пустым.");
                     closeResources();
                     return;
                 }
 
                 synchronized (chatServer) {
                     if (chatServer.clients.containsKey(username)) {
-                        writer.println("Имя пользователя уже занято. Подключение завершено.");
+                        writer.println("Имя пользователя занято. Попробуйте другое.");
                         closeResources();
                         return;
                     }
                     chatServer.addClient(username, this);
                 }
 
+                // Обработка сообщений
                 String message;
                 while ((message = reader.readLine()) != null) {
                     if (message.equalsIgnoreCase("/exit")) {
+                        writer.println("Вы вышли из чата.");
                         break;
                     }
                     chatServer.broadcast(username + ": " + message, this);
                 }
             } catch (IOException e) {
-                logger.error("Ошибка связи с клиентом: {}", e.getMessage());
+                logger.error("Ошибка связи с клиентом: {}", e.getMessage(), e);
             } finally {
                 chatServer.removeClient(username);
                 closeResources();
@@ -132,7 +131,9 @@ public class ChatServer {
         }
 
         public void sendMessage(String message) {
-            writer.println(message);
+            if (writer != null) {
+                writer.println(message);
+            }
         }
 
         private void closeResources() {
@@ -141,7 +142,7 @@ public class ChatServer {
                 if (writer != null) writer.close();
                 if (clientSocket != null) clientSocket.close();
             } catch (IOException e) {
-                logger.error("Ошибка при закрытии ресурсов: {}", e.getMessage());
+                logger.error("Ошибка при закрытии ресурсов: {}", e.getMessage(), e);
             }
         }
     }

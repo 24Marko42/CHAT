@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -7,19 +6,15 @@
     </appender>
 
     <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/chat.log</file>
+        <file>logs/chat_server.log</file>
+        <append>true</append>
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <root level="INFO">
+    <root level="info">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
-
-    <logger name="org.example.tetetete" level="INFO" additivity="false">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
-    </logger>
 </configuration>

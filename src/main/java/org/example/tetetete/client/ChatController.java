@@ -9,6 +9,8 @@ import javafx.scene.input.KeyCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class ChatController {
     private static final Logger logger = LoggerFactory.getLogger(ChatController.class);
 
@@ -24,6 +26,9 @@ public class ChatController {
     @FXML
     private Label userCountLabel; // Метка для отображения количества пользователей
 
+    @FXML
+    private Button logoutButton; // Кнопка для выхода
+
     private ClientSocketHandler socketHandler; // Обработчик сокета для взаимодействия с сервером
 
     @FXML
@@ -37,6 +42,15 @@ public class ChatController {
                 sendMessage();
             }
         });
+
+        // Устанавливаем обработчик событий для кнопки выхода
+        logoutButton.setOnAction(event -> {
+            try {
+                logout();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void sendMessage() {
@@ -45,6 +59,13 @@ public class ChatController {
             socketHandler.sendMessage(message); // Отправляем сообщение на сервер
             messageField.clear(); // Очищаем поле ввода
         }
+    }
+
+    private void logout() throws IOException {
+        // Логика для выхода из чата
+        // Например, можно закрыть соединение и вернуться к окну логина
+        socketHandler.close();
+        // Здесь можно добавить логику для перехода к окну логина
     }
 
     // Метод для установки обработчика сокета
