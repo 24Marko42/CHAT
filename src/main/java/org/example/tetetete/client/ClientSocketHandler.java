@@ -35,10 +35,18 @@ public class ClientSocketHandler {
     private void startListening() {
         new Thread(() -> {
             try {
+                // Отправляем имя пользователя на сервер
+                out.println(ChatClient.getUsername());
+
                 String message;
                 while ((message = in.readLine()) != null) { // Читаем входящие сообщения в цикле
-                    chatController.appendMessage(message); // Добавляем полученное сообщение в чат
-                    logger.info("Received message: {}", message); // Логируем полученное сообщение
+                    if (message.startsWith("USER_COUNT:")) {
+                        int userCount = Integer.parseInt(message.substring("USER_COUNT:".length()));
+                        chatController.updateUserCount(userCount);
+                    } else {
+                        chatController.appendMessage(message); // Добавляем полученное сообщение в чат
+                        logger.info("Received message: {}", message); // Логируем полученное сообщение
+                    }
                 }
             } catch (IOException e) {
                 logger.error("Error while listening for messages", e); // Логируем ошибку при прослушивании сообщений

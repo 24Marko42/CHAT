@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="200.0" prefWidth="303.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="org.example.tetetete.client.RegisterController">
+    <children>
+        <TextField fx:id="usernameField" layoutX="71.0" layoutY="43.0" promptText="Username" />
+        <PasswordField fx:id="passwordField" layoutX="71.0" layoutY="100.0" promptText="Password" />
+        <Button fx:id="registerButton" layoutX="208.0" layoutY="151.0" text="Register" />
+        <Button fx:id="backToLoginButton" layoutX="14.0" layoutY="151.0" text="Back to Login" />
+    </children>
+</AnchorPane>

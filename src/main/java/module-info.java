@@ -14,7 +14,8 @@ module org.example.tetetete {
     requires com.almasb.fxgl.all;
     requires com.fasterxml.jackson.databind;
     requires com.fasterxml.jackson.core;
-
+    requires spring.security.crypto;
+    requires spring.security.core;
 
 
     opens org.example.tetetete.client to javafx.fxml;

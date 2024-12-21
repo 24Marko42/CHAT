@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +26,43 @@ public class LoginController {
     @FXML
     private Button loginButton; // Кнопка для входа
 
+    @FXML
+    private Button registerButton; // Кнопка для перехода к регистрации
+
     private Stage primaryStage; // Основное окно приложения
 
     @FXML
     public void initialize() {
         // Устанавливаем обработчик событий для кнопки входа
-        loginButton.setOnAction(event -> {
-            String username = usernameField.getText();
-            String password = passwordField.getText();
-            if (authenticate(username, password)) {
-                openChatWindow(); // Открываем окно чата после успешного входа
-            } else {
-                logger.warn("Authentication failed for user: {}", username); // Логируем неудачную попытку входа
+        loginButton.setOnAction(event -> login());
+
+        // Устанавливаем обработчик событий для текстового поля ввода имени пользователя
+        usernameField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                login();
             }
         });
+
+        // Устанавливаем обработчик событий для текстового поля ввода пароля
+        passwordField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                login();
+            }
+        });
+
+        // Устанавливаем обработчик событий для кнопки регистрации
+        registerButton.setOnAction(event -> openRegisterWindow());
+    }
+
+    private void login() {
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        if (authenticate(username, password)) {
+            ChatClient.setUsername(username); // Сохраняем имя пользователя
+            openChatWindow(); // Открываем окно чата после успешного входа
+        } else {
+            logger.warn("Authentication failed for user: {}", username); // Логируем неудачную попытку входа
+        }
     }
 
     // Метод для аутентификации пользователя (пример)
@@ -67,6 +91,26 @@ public class LoginController {
             primaryStage.close();
         } catch (IOException e) {
             logger.error("Error while opening chat window", e); // Логируем ошибку при открытии окна чата
+        }
+    }
+
+    // Метод для открытия окна регистрации
+    private void openRegisterWindow() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/tetetete/register.fxml"));
+            Parent root = loader.load();
+            RegisterController registerController = loader.getController();
+            registerController.setPrimaryStage(primaryStage);
+
+            Stage registerStage = new Stage();
+            registerStage.setTitle("Chat Client - Register");
+            registerStage.setScene(new Scene(root));
+            registerStage.show();
+
+            // Закрываем окно логина
+            primaryStage.close();
+        } catch (IOException e) {
+            logger.error("Error while opening register window", e); // Логируем ошибку при открытии окна регистрации
         }
     }
 

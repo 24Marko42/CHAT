@@ -1,24 +1,24 @@
 package org.example.tetetete.common;
 
 public class Message {
-    private String sender;
-    private String content;
-    private long timestamp;
+    private String type; // Тип сообщения (например, "chat", "login", "register")
+    private String content; // Содержимое сообщения
 
-    public Message() {}
+    // Конструкторы, геттеры и сеттеры
+    public Message() {
+    }
 
-    public Message(String sender, String content, long timestamp) {
-        this.sender = sender;
+    public Message(String type, String content) {
+        this.type = type;
         this.content = content;
-        this.timestamp = timestamp;
     }
 
-    public String getSender() {
-        return sender;
+    public String getType() {
+        return type;
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getContent() {
@@ -29,20 +29,11 @@ public class Message {
         this.content = content;
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
     @Override
     public String toString() {
         return "Message{" +
-                "sender='" + sender + '\'' +
+                "type='" + type + '\'' +
                 ", content='" + content + '\'' +
-                ", timestamp=" + timestamp +
                 '}';
     }
 }

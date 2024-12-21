@@ -5,10 +5,11 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="200.0" prefWidth="303.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="org.example.tetetete.client.LoginController">
+<AnchorPane prefHeight="200.0" prefWidth="303.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.tetetete.client.LoginController">
     <children>
         <TextField fx:id="usernameField" layoutX="80.0" layoutY="50.0" promptText="Username" />
         <PasswordField fx:id="passwordField" layoutX="80.0" layoutY="100.0" promptText="Password" />
-        <Button fx:id="loginButton" layoutX="110.0" layoutY="150.0" text="Login" />
+        <Button fx:id="loginButton" layoutX="80.0" layoutY="149.0" text="Login" />
+      <Button fx:id="registerButton" layoutX="190.0" layoutY="149.0" mnemonicParsing="false" text="Register" />
     </children>
 </AnchorPane>

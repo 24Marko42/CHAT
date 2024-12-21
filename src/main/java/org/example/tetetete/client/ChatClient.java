@@ -12,19 +12,20 @@ import java.io.IOException;
 
 public class ChatClient extends Application {
     private static final Logger logger = LoggerFactory.getLogger(ChatClient.class);
+    private static String username;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Загружаем FXML файл логина и получаем корневой элемент
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/tetetete/login.fxml"));
+        // Загружаем FXML файл выбора и получаем корневой элемент
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/tetetete/choice.fxml"));
         Parent root = loader.load();
 
-        // Получаем контроллер логина
-        LoginController loginController = loader.getController();
-        loginController.setPrimaryStage(primaryStage);
+        // Получаем контроллер выбора
+        ChoiceController choiceController = loader.getController();
+        choiceController.setPrimaryStage(primaryStage);
 
         // Настраиваем и отображаем основное окно приложения
-        primaryStage.setTitle("Chat Client - Login");
+        primaryStage.setTitle("Chat Client - Choice");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
@@ -33,5 +34,13 @@ public class ChatClient extends Application {
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+    public static void setUsername(String username) {
+        ChatClient.username = username;
+    }
+
+    public static String getUsername() {
+        return username;
     }
 }
